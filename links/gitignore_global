@@ -1,0 +1,21 @@
+# no backups
+*.~
+.*.sw*
+
+# no macOS pesky files
+.DS_Store
+
+# vim file browsing history
+.netrwhist
+
+# tags files
+tag
+tags
+
+# project ackrc's
+.ackrc
+
+# python
+*.pyc
+.venv
+.env

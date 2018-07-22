@@ -1,0 +1,147 @@
+# vim: foldmethod=marker
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+  *) return ;;
+esac
+
+# reload profile
+alias reload='. ~/.bashrc >/dev/null && echo "reloaded"'
+
+# VARS {{{
+
+# env {{{
+
+reset_editor() {
+  # set default editor to vim
+  export VISUAL="$(command -v vim)"
+  export EDITOR="$VISUAL"
+}
+
+# use my color scheme for ls
+export LSCOLORS="gxfxcxdxbxegedabagacad"
+
+# use less on any system
+export LESS="RWi"
+export PAGER="less"
+
+export PYTHONSTARTUP=~/.pythonrc
+
+# env }}}
+
+# shell {{{
+
+# set PS2
+# PS2="λ "
+PS2="» "
+# set PS3
+PS3="$PS2"
+
+# use nullglob (if glob doesn't expand into anything, it is not preserved as literal text)
+shopt -s nullglob
+
+# don't accidentally overwrite files with '>' (use '>|' to force overwriting)
+set -o noclobber
+
+# let 'space' magically expand history command-line fu
+# use M-C-e to expand *all* command-line fu
+bind "SPACE: magic-space"
+
+# use vi readline bindings
+set -o vi
+
+HISTSIZE=100000
+HISTFILESIZE="$HISTSIZE"
+shopt -s histappend
+
+# disable flow control
+stty -ixon -ixoff
+
+# shell }}}
+
+# personal {{{
+
+# OS test
+case "$OSTYPE" in
+  darwin* ) OS=mac ;;
+  linux* ) OS=linux ;;
+esac
+
+# file to hold private keys
+private=~/.private
+
+# completion paths
+comp_prefix=/usr/local/
+bashcomp="$comp_prefix"/share/bash-completion/bash_completion
+completion_dir="$comp_prefix"/etc/bash_completion.d
+
+# personal }}}
+
+# VARS }}}
+
+# sourcing {{{
+
+# ~/.bash files
+for file in ~/.bash/*.bash ; do
+  source "$file"
+done
+for file in ~/.bash/"$OS"/*.bash ; do
+  source "$file"
+done
+
+# source .private for meant to never be seen
+[[ -r "$private" ]] && source "$private"
+
+# source anything in ~/.personal
+if [[ -d ~/.personal ]]; then
+  for file in ~/.personal/*.sh; do
+    if [[ -r "$file" ]]; then
+      source "$file"
+    fi
+  done
+  for file in ~/.personal/"$OS"/*.sh ; do
+    if [[ -r "$file" ]]; then
+      source "$file"
+    fi
+  done
+  # add ~/.personal/bin to path
+  if [[ -d ~/.personal/bin ]]; then
+    pathadd "$HOME/.personal/bin"
+  fi
+fi
+
+# sourcing }}}
+
+# custom {{{
+# this is the stuff that is affected by sourcing, such as changing variables
+
+reset_editor
+
+# paths {{{
+
+# Add bin folder for scripts to path
+pathadd "$HOME/dot-mini/bin"
+
+# paths }}}
+
+# completion {{{
+
+# bash completion
+[[ -r "$bashcomp" ]] && source "$bashcomp"
+# source files in completion_dir
+for file in "$completion_dir"/*; do
+  if [[ -r "$file" ]]; then
+    source "$file"
+  fi
+done
+
+# completion }}}
+
+# custom }}}
+
+unset file
+unset bashcomp
+unset private
+unset completion_dir
+unset comp_prefix
+unset OS

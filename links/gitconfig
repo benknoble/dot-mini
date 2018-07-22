@@ -1,0 +1,65 @@
+# vim: noet:sw=8:sts=8
+[alias]
+	amend = commit --amend
+	ca = commit --all
+	cc = commit
+	cd = checkout
+	cm = commit -m
+	d = diff
+	grall = !git graph --all
+	graph = !git graph-long --oneline
+	graph-long = log --graph
+	intend = add --intent-to-add
+	last = log -1 HEAD
+	logp = log --graph --abbrev-commit \
+		--pretty=format:'%C(yellow)%h%Creset%C(bold green)%d%Creset %s %C(magenta)(%cr)%Creset %C(ul bold cyan)<%an>%Creset'
+	logpall = !git logp --all
+	ls = branch --list
+	merc = merge --no-ff
+	newb = checkout -b
+	patch = add --patch
+	s = status -sb
+	sb = show-branch
+	sdiff = !git diff && git submodule foreach 'git diff'
+	spush = push --recurse-submodules=on-demand
+	stat = status
+	supdate = submodule update --remote --checkout
+	unstage = reset HEAD --
+	visual = !gitk --all &
+[merge]
+	tool = fugitive
+	conflictstyle = diff3
+[core]
+	excludesfile = ~/.gitignore_global
+	pager = less -FRX
+[diff]
+	submodule = log
+	tool = vimdiff
+	colorMoved = default
+[status]
+	submodulesummary = 1
+[push]
+	recurseSubmodules = check
+[include]
+	path = ~/.gitconfig.local
+[commit]
+	verbose = true
+[difftool]
+	prompt = no
+[mergetool]
+	prompt = no
+[gitsh "color"]
+	default = cyan
+[gitsh]
+	prompt = "%D (%c%b %#%w) git>"
+	noGreeting = true
+	defaultCommand = status -sb && :echo
+[mergetool "fugitive"]
+	cmd = vim --nofork -c \"Gvdiff\" \"$MERGED\"
+	trustExitCode = true
+[fetch]
+	recurseSubmodules = on-demand
+[rerere]
+	enabled = true
+[rebase]
+	autoSquash = true
