@@ -8,7 +8,6 @@ dotfiles_dir="$(dirname "$dir")"
 olddir="${dotfiles_dir}_old"
 # list of files/folders to symlink in homedir
 declare -A files=(
-  [ackrc]=.ackrc
   [bash]=.bash
   [bash_profile]=.bash_profile
   [bashrc]=.bashrc
